@@ -11,6 +11,18 @@ music_queue = []
 current_song_index = 0
 playing = False
 
+command_handlers = {
+    "skp": lambda _: (skip_song, ()),
+    "mps": lambda _: (toggle_pause, ()),
+    "mpl": lambda content: (play_music, (content))
+}
+
+commands_string = """
+ mpl(name)   - Start a music playlist (Playlist1 or Playlist2)  
+ mps()        - Pause or resume music  
+ skp()        - Skip the current song 
+"""
+
 def music_thread(folder):
     global music_queue, current_song_index, playing
     music_folder = os.path.join(MUSIC_DIR, folder)

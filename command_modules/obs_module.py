@@ -5,6 +5,18 @@ OBS_HOST = config.OBS_HOST
 OBS_PORT = config.OBS_PORT
 OBS_PASSWORD = config.OBS_PASSWORD
 
+command_handlers = {
+    "clp": lambda _: (save_clip, ()),
+    "str": lambda _: (start_recording, ()),
+    "spr": lambda _: (stop_recording, ())
+}
+
+commands_string = """
+ clp()        - Save or clip replays  
+ str()        - Start recording  
+ spr()        - Stop recording  
+"""
+
 def save_clip():
     try:
         ws = obsws(OBS_HOST, OBS_PORT, OBS_PASSWORD)
