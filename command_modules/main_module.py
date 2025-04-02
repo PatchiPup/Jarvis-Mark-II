@@ -90,9 +90,9 @@ def unibeam(n):
 
 def freaky():
     for _ in range(50):
-        pyautogui.mouseDown(button='right')
-        time.sleep(0.01)
-        pyautogui.mouseUp(button='right')
+        mouse.press(Button.right)
+        time.sleep(0.02)
+        mouse.release(Button.right)
         time.sleep(0.05)
 
 def press(key):
@@ -127,14 +127,20 @@ def change_volume(amount):
 
 def insta_lock():
     screen_width, screen_height = pyautogui.size()
-    tx = int(screen_width * 1800 / 1920)
-    ty = int(screen_height * 650 / 1080)
+    
+    # Calculate target position using relative positions (93.75% of screen width, 60.19% of screen height)
+    tx = int(screen_width * 0.9375)  # 1800/1920 ≈ 0.9375
+    ty = int(screen_height * 0.6019)  # 650/1080 ≈ 0.6019
+    
     duration = 0.5
     steps = 50
 
     sx, sy = mouse.position
-    p1 = (sx + 300, sy - 200)
-    p2 = (tx - 100, ty + 200)
+    offset_x = int(screen_width * 0.15625) # 300/1920 ≈ 0.15625
+    offset_y = int(screen_height * 0.18519) # 200/1080 ≈ 0.18519
+    
+    p1 = (sx + offset_x, sy - offset_y)
+    p2 = (tx - offset_x, ty + offset_y)
     p3 = (tx, ty)
 
     t_values = np.linspace(0, 1, steps)
