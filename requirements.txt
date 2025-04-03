@@ -17,3 +17,4 @@ spotipy
 pyreadline3
 torch
 faster-whisper
+win32gui

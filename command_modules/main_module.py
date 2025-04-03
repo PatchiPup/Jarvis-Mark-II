@@ -5,6 +5,7 @@ import pyautogui
 import pygame
 import os
 import numpy as np
+import win32gui
 from pynput.keyboard import Key, Controller as KeyController
 from pynput.mouse import Controller as MouseController, Button
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
@@ -125,19 +126,39 @@ def change_volume(amount):
     new_level = max(0.0, min(new_level, 1.0))
     pygame.mixer.music.set_volume(new_level)
 
-def insta_lock():
-    screen_width, screen_height = pyautogui.size()
+def get_game_window():
+    def callback(hwnd, windows):
+        if win32gui.IsWindowVisible(hwnd):
+            title = win32gui.GetWindowText(hwnd)
+            if "Marvel Rivals" in title:
+                windows.append(hwnd)
+        return True
     
-    # Calculate target position using relative positions (93.75% of screen width, 60.19% of screen height)
-    tx = int(screen_width * 0.9375)  # 1800/1920 ≈ 0.9375
-    ty = int(screen_height * 0.6019)  # 650/1080 ≈ 0.6019
+    windows = []
+    win32gui.EnumWindows(callback, windows)
+    return windows[0] if windows else None
+
+def insta_lock():
+    game_window = get_game_window()
+    if not game_window:
+        print("Marvel Rivals window not found")
+        return
+        
+    # Get game window dimensions
+    left, top, right, bottom = win32gui.GetWindowRect(game_window)
+    window_width = right - left
+    window_height = bottom - top
+    
+    # Calculate target position using relative positions within the game window
+    tx = int(window_width * 0.9375)  # 1800/1920 ≈ 0.9375
+    ty = int(window_height * 0.6019)  # 650/1080 ≈ 0.6019
     
     duration = 0.5
     steps = 50
 
     sx, sy = mouse.position
-    offset_x = int(screen_width * 0.15625) # 300/1920 ≈ 0.15625
-    offset_y = int(screen_height * 0.18519) # 200/1080 ≈ 0.18519
+    offset_x = int(window_width * 0.15625)  # 300/1920 ≈ 0.15625
+    offset_y = int(window_height * 0.18519)  # 200/1080 ≈ 0.18519
     
     p1 = (sx + offset_x, sy - offset_y)
     p2 = (tx - offset_x, ty + offset_y)
