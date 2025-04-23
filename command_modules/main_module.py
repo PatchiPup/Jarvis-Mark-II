@@ -29,7 +29,11 @@ def get_personality_names():
     personalities_dir = os.path.join(parent_dir, "personalities")
     return [os.path.splitext(filename)[0] for filename in os.listdir(personalities_dir) if filename.endswith(".json")]
 
+def get_sound_names():
+    return [os.path.splitext(filename)[0] for filename in os.listdir(SOUNDS_DIR) if filename.endswith(".mp3")]
+
 available_personalities = ", ".join(get_personality_names())
+available_sounds = ", ".join(get_sound_names())
 
 command_handlers = {
         "prs": lambda content: (press, (content)),
@@ -67,7 +71,7 @@ commands_string = f"""
   vlu()        - Turn up the volume  
   vls(n)      - Set volume to a specific percentage  
   lck()        - Insta-lock Iron Man  
-  ply(name)   - Play a sound effect (fart, roast, laugh, getout, boom, scream, yay)  
+  ply(name)   - Play a sound effect. Available sounds: {available_sounds}  
   """
 
 additional_info = """
