@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# build files
+build.bat
+build.py
+verify_env.py
+Jarvis-Mark-II.spec
+
 # distribution
 .Python
 build/
